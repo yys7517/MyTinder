@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "134836192808",
+    "project_id": "mytinder-21682",
+    "storage_bucket": "mytinder-21682.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:134836192808:android:71d34e8aeaea8110d7171d",
+        "android_client_info": {
+          "package_name": "com.example.mytinder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "134836192808-ta5jc07pnutvmju42q4i1he7a6sevp6e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKCbbmKx_OU-lYMuAlGVdloAoGkV5G90k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "134836192808-ta5jc07pnutvmju42q4i1he7a6sevp6e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
