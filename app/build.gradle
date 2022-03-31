@@ -50,6 +50,7 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:29.2.1')
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-auth-ktx'      // FireBase Auth.
+    implementation 'com.google.firebase:firebase-database-ktx'  // Firebase Realtime Database
 
     // CardStackView
     implementation 'com.yuyakaido.android:card-stack-view:2.3.4'
