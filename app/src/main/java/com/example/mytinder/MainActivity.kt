@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import com.example.mytinder.auth.IntroActivity
 import com.example.mytinder.auth.UserInfoModel
 import com.example.mytinder.databinding.ActivityMainBinding
+import com.example.mytinder.setting.MyPageActivity
 import com.example.mytinder.slider.CardStackAdapter
 import com.example.mytinder.utils.FirebaseRef
 import com.google.firebase.auth.FirebaseAuth
@@ -46,9 +47,8 @@ class MainActivity : AppCompatActivity() {
         val settingIcon : ImageView = binding.settingIcon
 
         settingIcon.setOnClickListener {
-            auth.signOut()
-            val intent = Intent( this, IntroActivity::class.java )
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+            // 마이페이지로 이동.
+            val intent = Intent( this, MyPageActivity::class.java )
             startActivity( intent )
         }
 

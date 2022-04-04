@@ -3,6 +3,7 @@ package com.example.mytinder.auth
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.example.mytinder.MainActivity
 import com.example.mytinder.R
@@ -32,6 +33,7 @@ class LoginActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
                         val intent = Intent( this, MainActivity::class.java )
                         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        Toast.makeText(this, "로그인 되었습니다.", Toast.LENGTH_SHORT).show()
                         startActivity(intent)
 
                     } else {
