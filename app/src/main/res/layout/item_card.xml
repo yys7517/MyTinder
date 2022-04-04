@@ -43,7 +43,7 @@
 
         <TextView
             android:text="Name"
-            android:id="@+id/txtName"
+            android:id="@+id/itemNickname"
             android:layout_margin="5dp"
             android:textSize="30sp"
             android:textColor="@color/black"
@@ -54,7 +54,7 @@
         <TextView
             android:text="Age"
             android:layout_margin="5dp"
-            android:id="@+id/txtAge"
+            android:id="@+id/itemAge"
             android:textSize="30sp"
             android:textColor="@color/black"
             android:textStyle="bold"
@@ -63,7 +63,7 @@
 
         <TextView
             android:text="City"
-            android:id="@+id/txtCity"
+            android:id="@+id/itemCity"
             android:textSize="30sp"
             android:layout_margin="5dp"
             android:textColor="@color/black"
