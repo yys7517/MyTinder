@@ -20,10 +20,21 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:id="@+id/profileImageArea"
+                    android:layout_width="wrap_content"
+                    android:layout_height="200dp"
                     android:layout_gravity="center"
                     android:src="@drawable/profile_img" />
+
+                <TextView
+                    android:layout_margin="10dp"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:text="프로필 이미지를 업로드하세요."
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:background="@drawable/background_textedit_radius"
@@ -80,23 +91,43 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:background="@drawable/background_textedit_radius"
-                    android:padding="5dp"
+                <LinearLayout
                     android:layout_marginTop="10dp"
+                    android:weightSum="4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:counterEnabled="true"
-                    app:counterMaxLength="10">
+                    android:orientation="horizontal" >
 
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/nickArea"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_weight="1"
+                        android:background="@drawable/background_textedit_radius"
+                        android:padding="5dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="닉네임" />
+                        app:counterEnabled="true"
+                        app:counterMaxLength="10">
 
-                </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/nickArea"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="닉네임" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <Button
+                        android:id="@+id/btnNickCheck"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/background_maincolor_radius"
+                        android:text="중복확인"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3" />
+
+                </LinearLayout>
+
+
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:background="@drawable/background_textedit_radius"
@@ -126,7 +157,7 @@
                     >
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/localArea"
+                        android:id="@+id/cityArea"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="지역" />
@@ -154,6 +185,8 @@
                     android:id="@+id/btnJoin"
                     android:layout_marginTop="20dp"
                     android:layout_width="match_parent"
+                    android:textSize="15sp"
+                    android:textColor="@color/black"
                     android:layout_height="wrap_content"
                     android:background="@drawable/background_maincolor_radius"
                     android:text="회원가입" />
