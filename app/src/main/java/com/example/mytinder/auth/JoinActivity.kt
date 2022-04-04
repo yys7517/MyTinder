@@ -1,9 +1,13 @@
 package com.example.mytinder.auth
 
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.RadioButton
 import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
@@ -11,6 +15,7 @@ import androidx.databinding.DataBindingUtil
 import com.example.mytinder.MainActivity
 import com.example.mytinder.R
 import com.example.mytinder.databinding.ActivityJoinBinding
+import com.example.mytinder.utils.FirebaseAuthUtils
 import com.example.mytinder.utils.FirebaseRef
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -20,6 +25,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import java.io.ByteArrayOutputStream
 
 class JoinActivity : AppCompatActivity() {
     private lateinit var binding : ActivityJoinBinding
@@ -40,8 +46,14 @@ class JoinActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView( this, R.layout.activity_join )
 
+        val rgGender = binding.rgGender
+        val rbMale = binding.rbMale
+        val rbFemale = binding.rbFemale
+
         auth = Firebase.auth
+
         var isNickChecked = false
+        var isProfileImageUploaded = false
 
         val getAction = registerForActivityResult(
             ActivityResultContracts.GetContent(),
@@ -53,6 +65,7 @@ class JoinActivity : AppCompatActivity() {
         binding.profileImageArea.setOnClickListener {
             // 핸드폰 이미지 가져오기
             getAction.launch("image/*")
+            isProfileImageUploaded = true
         }
 
         binding.btnNickCheck.setOnClickListener {
@@ -97,7 +110,6 @@ class JoinActivity : AppCompatActivity() {
             val passCheck = binding.passCheckArea.text.toString()
 
             nickname = binding.nickArea.text.toString()
-            gender = binding.genderArea.text.toString()
             city = binding.cityArea.text.toString()
             age = binding.ageArea.text.toString()
             uid = auth.currentUser?.uid.toString()
@@ -135,6 +147,21 @@ class JoinActivity : AppCompatActivity() {
                     binding.passCheckArea.text?.clear()
                 }
 
+                nickname.isEmpty() -> {
+                    Toast.makeText(this, "닉네임을 입력해주세요.", Toast.LENGTH_SHORT).show()
+                    isGoToJoin = false
+                }
+
+                age.isEmpty() -> {
+                    Toast.makeText(this, "나이를 입력해주세요.", Toast.LENGTH_SHORT).show()
+                    isGoToJoin = false
+                }
+
+                city.isEmpty() -> {
+                    Toast.makeText(this, "지역을 입력해주세요.", Toast.LENGTH_SHORT).show()
+                    isGoToJoin = false
+                }
+
                 ! isNickChecked -> {
                     Toast.makeText(this, "닉네임 중복확인을 해주세요.", Toast.LENGTH_SHORT).show()
                 }
@@ -145,8 +172,12 @@ class JoinActivity : AppCompatActivity() {
                     Toast.makeText(this, "닉네임 중복확인을 해주세요.", Toast.LENGTH_SHORT).show()
                 }
 
+                ! isProfileImageUploaded -> {
+                    Toast.makeText(this, "프로필 사진을 선택하세요.", Toast.LENGTH_SHORT).show()
+                }
 
-                isGoToJoin && isNickChecked -> {
+
+                isGoToJoin && isNickChecked && isProfileImageUploaded-> {
                     // 회원가입 진행
                     auth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(this) { task ->
@@ -158,6 +189,9 @@ class JoinActivity : AppCompatActivity() {
                                 FirebaseRef.userInfoRef
                                     .child(uid)
                                     .setValue( UserInfoModel( uid, nickname, gender, city, age)  )
+
+                                // 회원 프로필 사진 업로드
+                                uploadImage( uid )
 
                                 Toast.makeText(this, "회원가입 되었습니다.",Toast.LENGTH_SHORT).show()
 
@@ -177,6 +211,46 @@ class JoinActivity : AppCompatActivity() {
 
 
 
+        }
+    }
+
+    private fun uploadImage( uid : String ) {
+        val imageView = binding.profileImageArea
+
+        imageView.isDrawingCacheEnabled = true
+        imageView.buildDrawingCache()
+        val bitmap = (imageView.drawable as BitmapDrawable).bitmap
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val data = baos.toByteArray()
+
+        var uploadTask = FirebaseRef.storageRef.child("${uid}.png").putBytes(data)
+        uploadTask.
+        addOnFailureListener {
+
+        }.
+        addOnSuccessListener { taskSnapshot ->
+
+        }
+
+    }
+
+    fun onRadioButtonClicked(view: View) {
+        if (view is RadioButton) {
+            // Is the button now checked?
+            val checked = view.isChecked
+
+            // Check which radio button was clicked
+            when (view.getId()) {
+                R.id.rbMale ->
+                    if (checked) {
+                        gender = "남"
+                    }
+                R.id.rbFemale ->
+                    if (checked) {
+                        gender = "여"
+                    }
+            }
         }
     }
 }
