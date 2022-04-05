@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -34,8 +35,16 @@ class CardStackAdapter( val context : Context, val items : List<UserInfoModel> )
         val ageArea : TextView = itemView.findViewById( R.id.itemAge )
         val cityArea : TextView = itemView.findViewById( R.id.itemCity )
 
+        val left_overlay = itemView.findViewById<FrameLayout>(R.id.left_overlay)
+        val right_overlay = itemView.findViewById<FrameLayout>(R.id.right_overlay)
+
         fun binding( user : UserInfoModel ) {
 
+            // 오버레이 아이콘 최상단으로 가져오기.
+            left_overlay.bringToFront()
+            right_overlay.bringToFront()
+
+            // 카드 스택 뷰에 프로필 사진 가져와서 Glide로 적용시키기.
             val profileImageRef = FirebaseRef.storageRef.child("${user.uid}.png")
             profileImageRef.downloadUrl.addOnCompleteListener(OnCompleteListener { task ->
                 if( task.isSuccessful ) {
@@ -44,6 +53,8 @@ class CardStackAdapter( val context : Context, val items : List<UserInfoModel> )
                         .into(profileImageArea)
                 }
             })
+
+            // 텍스트 바인딩.
             nicknameArea.text = user.nickname
             ageArea.text = user.age
             cityArea.text = user.city
