@@ -12,6 +12,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyTinder">
         <activity
+            android:name=".setting.SettingActivity"
+            android:exported="true" />
+        <activity
+            android:name=".message.MyLikeListActivity"
+            android:exported="true" />
+        <activity
+            android:name=".message.LikeMeListActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".message.MatchedListActivity"
+            android:exported="true"/>
+        <activity
             android:name=".setting.MyPageActivity"
             android:exported="true" />
         <activity
@@ -34,7 +46,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
     </application>
 
 </manifest>
