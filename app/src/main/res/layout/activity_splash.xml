@@ -9,6 +9,7 @@
     tools:context=".SplashActivity">
 
     <TextView
+        android:fontFamily="@font/bmjua_ttf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
@@ -16,7 +17,7 @@
         android:textStyle="bold"
         android:textColor="@color/main_color"
         android:background="@drawable/background_titletext_radius"
-        android:padding="10dp"
+        android:padding="20dp"
         android:text="My Tinder"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

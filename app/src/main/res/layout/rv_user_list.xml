@@ -17,6 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:fontFamily="@font/bmjua_ttf"
         android:id="@+id/userRVNick"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -40,6 +41,7 @@
         app:layout_constraintStart_toEndOf="@+id/userRVImage" >
 
         <TextView
+            android:fontFamily="@font/bmjua_ttf"
             android:id="@+id/userRVAge"
             android:text="22세, "
             android:textColor="#999999"
@@ -48,6 +50,7 @@
             android:layout_height="wrap_content" />
 
         <TextView
+            android:fontFamily="@font/bmjua_ttf"
             android:id="@+id/userRVCity"
             android:text="경기도 부천시 거주"
             android:textColor="#999999"
@@ -58,6 +61,7 @@
     </LinearLayout>
 
     <TextView
+        android:fontFamily="@font/bmjua_ttf"
         android:id="@+id/userRVGender"
         android:text="여성"
         android:textColor="@color/black"

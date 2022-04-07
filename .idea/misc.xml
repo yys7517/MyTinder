@@ -17,8 +17,9 @@
         <entry key="..\:/Users/yys75/ASProjects/MyTinder/app/src/main/res/layout/activity_my_page.xml" value="0.30572916666666666" />
         <entry key="..\:/Users/yys75/ASProjects/MyTinder/app/src/main/res/layout/activity_setting.xml" value="0.33" />
         <entry key="..\:/Users/yys75/ASProjects/MyTinder/app/src/main/res/layout/activity_splash.xml" value="0.3182291666666667" />
-        <entry key="..\:/Users/yys75/ASProjects/MyTinder/app/src/main/res/layout/item_card.xml" value="0.33489583333333334" />
+        <entry key="..\:/Users/yys75/ASProjects/MyTinder/app/src/main/res/layout/item_card.xml" value="0.25" />
         <entry key="..\:/Users/yys75/ASProjects/MyTinder/app/src/main/res/layout/rv_user_list.xml" value="0.3015625" />
+        <entry key="..\:/Users/yys75/ASProjects/MyTinder/app/src/main/res/layout/user_list.xml" value="0.5213541666666667" />
       </map>
     </option>
   </component>

@@ -17,6 +17,7 @@ import com.example.mytinder.R
 import com.example.mytinder.databinding.ActivityJoinBinding
 import com.example.mytinder.utils.FirebaseAuthUtils
 import com.example.mytinder.utils.FirebaseRef
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ChildEventListener
@@ -25,6 +26,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import java.io.ByteArrayOutputStream
 
 class JoinActivity : AppCompatActivity() {
@@ -39,12 +41,35 @@ class JoinActivity : AppCompatActivity() {
     private var age = ""
     private var uid = ""
 
+    // FCM 토큰 => token 정보도 유저 정보에 추가하자.
+    private var token = ""
+
+    // 사용가능한 닉네임을 저장할 nickTemp => 최종 회원가입 시, 사용가능한 닉네임인지 확인하기 위해 변수에 담아놓자.
     private var nickTemp = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView( this, R.layout.activity_join )
+
+        // FCM 토큰은 유저를 식별하기 위한 것이 아닌, 특정 디바이스를 식별하기 위한 것. 로그아웃 후에도 토큰이 남아있다.
+        // 토큰을 언제 삭제해야 할까 ?
+
+        // 기기마다 회원가입을 한 번만 하게끔 제약을 걸어야할까 ?
+
+        // 토큰 가져오기
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (task.isSuccessful) {
+                token = task.result.toString()
+            }
+            else {
+                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            Log.d("사용자 Token", token.toString() )
+            // Toast.makeText(baseContext, token.toString() , Toast.LENGTH_SHORT).show()
+        })
 
         val rgGender = binding.rgGender
         val rbMale = binding.rbMale
@@ -55,6 +80,7 @@ class JoinActivity : AppCompatActivity() {
         var isNickChecked = false
         var isProfileImageUploaded = false
 
+        // 갤러리에서 이미지 가져와서 이미지 뷰에 설정하기.
         val getAction = registerForActivityResult(
             ActivityResultContracts.GetContent(),
             ActivityResultCallback { uri ->
@@ -68,39 +94,51 @@ class JoinActivity : AppCompatActivity() {
             isProfileImageUploaded = true
         }
 
+        // 닉네임 중복 확인
         binding.btnNickCheck.setOnClickListener {
-            // 닉네임 중복 확인
+
             nickname = binding.nickArea.text.toString()
 
-            FirebaseRef.userInfoRef.orderByChild("nickname").equalTo( nickname ).addListenerForSingleValueEvent( object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    if (!dataSnapshot.exists()) {
-                        // 닉네임 중복 없음
-                        isNickChecked = true
+            if ( nickname.isEmpty() ) {
+                Toast.makeText(baseContext, "닉네임을 입력해주세요.", Toast.LENGTH_SHORT).show()
+            }
 
-                        Toast.makeText(applicationContext,
-                            "사용할 수 있는 닉네임입니다.",
-                            Toast.LENGTH_SHORT).show()
+            else {
+                FirebaseRef.userInfoRef.orderByChild("nickname").equalTo(nickname)
+                    .addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                            if (!dataSnapshot.exists()) {
+                                // 닉네임 중복 없음
+                                isNickChecked = true
 
-                        // 중복확인 후, 닉네임이 변경됬을 때
-                        // 중복이 안되는 닉네임인지 확인하기 위함.
-                        nickTemp = nickname
+                                Toast.makeText(
+                                    applicationContext,
+                                    "사용할 수 있는 닉네임입니다.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+
+                                // 중복확인 후, 닉네임이 변경됬을 때
+                                // 중복이 안되는 닉네임인지 확인하기 위함.
+                                nickTemp = nickname
 
 
-                    } else {
-                        isNickChecked = false
-                        Toast.makeText( baseContext, "중복된 닉네임 입니다.", Toast.LENGTH_SHORT).show()
-                    }
-                }
+                            } else {
+                                isNickChecked = false
+                                Toast.makeText(baseContext, "중복된 닉네임 입니다.", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+                        }
 
-                override fun onCancelled(databaseError: DatabaseError) {
-                    Toast.makeText(applicationContext,
-                        databaseError.message,
-                        Toast.LENGTH_SHORT).show()
-                }
-            })
+                        override fun onCancelled(databaseError: DatabaseError) {
+                            Toast.makeText(
+                                applicationContext,
+                                databaseError.message,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    })
+            }
         }
-
 
         // 회원가입 완료 버튼을 눌렀을 때
         binding.btnJoin.setOnClickListener {
@@ -188,7 +226,7 @@ class JoinActivity : AppCompatActivity() {
                                 // 회원정보 DB에 저장.
                                 FirebaseRef.userInfoRef
                                     .child(uid)
-                                    .setValue( UserInfoModel( uid, nickname, gender, city, age)  )
+                                    .setValue( UserInfoModel( uid, nickname, gender, city, age, token )  )
 
                                 // 회원 프로필 사진 업로드
                                 uploadImage( uid )
@@ -206,14 +244,10 @@ class JoinActivity : AppCompatActivity() {
                         }
                 }
             }
-
-
-
-
-
         }
     }
 
+    // 이미지 Storage 에 업로드
     private fun uploadImage( uid : String ) {
         val imageView = binding.profileImageArea
 
@@ -235,6 +269,7 @@ class JoinActivity : AppCompatActivity() {
 
     }
 
+    // 성별 라디오 버튼 리스너
     fun onRadioButtonClicked(view: View) {
         if (view is RadioButton) {
             // Is the button now checked?
