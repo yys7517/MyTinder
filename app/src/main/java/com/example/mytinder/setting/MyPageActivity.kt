@@ -65,9 +65,9 @@ class MyPageActivity : AppCompatActivity() {
 
                 binding.myUid.text = myUserInfo?.uid.toString()
                 binding.myNickname.text = myUserInfo?.nickname.toString()
-                binding.myAge.text = myUserInfo?.age.toString()
+                binding.myAge.text = "${myUserInfo?.age}세"
                 binding.myCity.text = myUserInfo?.city.toString()
-                binding.myGender.text = myUserInfo?.gender.toString()
+                binding.myGender.text = "${myUserInfo?.gender}성"
 
                 val profileImageRef = FirebaseRef.storageRef.child("${myUserInfo?.uid}.png")
 

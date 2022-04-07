@@ -56,9 +56,8 @@ class CardStackAdapter( val context : Context, val items : List<UserInfoModel> )
 
             // 텍스트 바인딩.
             nicknameArea.text = user.nickname
-            ageArea.text = user.age
-            cityArea.text = user.city
-
+            ageArea.text = "${user.age}세"
+            cityArea.text = "${user.city} 거주"
 
         }
     }
