@@ -48,9 +48,7 @@ class MainActivity : AppCompatActivity() {
     private var userCount = 0
     private lateinit var myGender : String
 
-
     private val TAG = MainActivity::class.java.simpleName
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,8 +93,6 @@ class MainActivity : AppCompatActivity() {
 
                         Like( myUid , otherUid)
 
-                        // 내가 좋아하는 사람의 LIKE 리스트
-                        getOtherUserLikeList( otherUid )
                     }
 
                 }
@@ -104,8 +100,10 @@ class MainActivity : AppCompatActivity() {
 
                 if( userCount == userDataList.count() ) {
                     getUserDataList( myGender )
-                    Toast.makeText(baseContext, "유저 새롭게 받아옵니다.", Toast.LENGTH_SHORT).show()
 
+                    // Toast.makeText(baseContext, "유저 새롭게 받아옵니다.", Toast.LENGTH_SHORT).show()
+
+                    // * ProgressBar Dialog 를 사용해보자.
 
                     userCount = 0
                 }
@@ -223,47 +221,62 @@ class MainActivity : AppCompatActivity() {
     // 유저의 좋아요를 표시하는 부분
     // 나의 uid, 내가 좋아하는 사람의 uid
     private fun Like( myUid : String, otherUid : String ) {
+
         FirebaseRef.userLikeRef.child( myUid ).child(otherUid).setValue(true)
+
+        // 내가 좋아하는 사람이 나를 좋아했을 때 => MATCHED ! !
+        isMatched( myUid, otherUid)
+
     }
 
     private fun disLike( myUid : String, otherUid : String ) {
         FirebaseRef.userLikeRef.child( myUid ).child(otherUid).removeValue()
+
     }
 
     // 내가 좋아요한 사람 -> key
     // 내가 좋아요한 사람이 좋아하는 사람들 -> value [...]
-    private fun getOtherUserLikeList( otherUid: String ) {
-        // Read from the database
+    private fun isMatched( myUid: String,  otherUid : String )  {
+
         FirebaseRef.userLikeRef.child(otherUid).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 // Log.e( TAG, dataSnapshot.toString() )   // { key = DBQGJbpsZ5YEXrmiSN5Xb38PVOe2, value = null }
 
-                dataSnapshot.key.toString()
+                // dataSnapshot.key.toString()
                 // key 가 value 를 좋아하는 구성.
 
                 for( dataModel in dataSnapshot.children ) {
-                    Log.e( TAG, dataModel.toString() )
-                    // { key = eS2syMwP92f0fMG67VdwrCP4s4F2, value = false }
-                    // dataModel 의 key 값이 그 사람이 좋아하는 사람의 uid가 된다.
+                    // Log.e( "매칭 메서드", dataModel.toString() )  { key = YUDeVVRXgCadFHFHHjto0FquAsN2, value = true }
+
                     val otherLikeUser = dataModel.key.toString()
+                    // Log.e( "매칭 메서드", otherLikeUser )  // YUDeVVRXgCadFHFHHjto0FquAsN2
 
-                    val myUid = FirebaseAuthUtils.getUid()
+                    if( otherLikeUser.trim() == myUid.trim() ) {
+                        Log.e( "매칭 결과", "매칭됨" )
+                        Toast.makeText(this@MainActivity, "매칭 완료", Toast.LENGTH_LONG ).show()
 
-                    if( otherLikeUser == myUid ) {
-                        Toast.makeText(this@MainActivity, "매칭 완료", Toast.LENGTH_SHORT ).show()
-                        createNotificationChannel()
-                        sendNotification()
+                        // 1. 앱에서 코드로 Notification 띄우기
+                        // createNotificationChannel()
+                        // sendNotification()
+
+                        // 2. Firebase 콘솔에서 FCM을 사용하여 모든 사용자에게 push 보내기 => X
+                        // 매칭 정보는 모든 사용자에게 보낼 필요 X
+
+                        // 3. 토큰 정보를 사용하면 FCM을 통해 특정 사용자에게 push를 보낼 수 있다.
+                        // 토큰을 통해 특정 사용자를 식별. UID 와 비슷한 개념.
+
                     }
                 }
-
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // Failed to read value
-
+                Log.e(TAG, error.toString())
             }
         })
     }
+
+
+
 
     private fun createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
