@@ -11,19 +11,25 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.mytinder.R
 import com.example.mytinder.auth.UserInfoModel
+import com.example.mytinder.message.fcm.NotiModel
+import com.example.mytinder.message.fcm.PushNotification
+import com.example.mytinder.message.fcm.RetrofitInstance
 import com.example.mytinder.utils.FirebaseRef
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class UserListRVAdapter(
+class MatchedListRVAdapter(
     val context: Context,
-    val items : ArrayList<UserInfoModel> ) : RecyclerView.Adapter< UserListRVAdapter.ViewHolder > () {
+    val items : ArrayList<UserInfoModel> ) : RecyclerView.Adapter< MatchedListRVAdapter.ViewHolder > () {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserListRVAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MatchedListRVAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.rv_user_list, parent,false )
 
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: UserListRVAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MatchedListRVAdapter.ViewHolder, position: Int) {
         holder.bindItems( items[position] )
     }
 
@@ -51,17 +57,26 @@ class UserListRVAdapter(
                     // 실패 시
                     Log.e("리사이클러 리스트", "이미지 불러오기 실패")
                 }
-
             txtNick.text = user.nickname
 
             txtAge.text = "${user.age}세, "
             txtCity.text = "${user.city} 거주"
             txtGender.text ="${user.gender}성"
 
-            // 리스트 클릭 시 - 프로필 구경하기.. Activity, layout 만들어야함
+            // 리스트 클릭 시 - 매칭된 유저
+            // 메시지 보내기.
             itemView.setOnClickListener {
+                val notiModel = NotiModel("a","b")
+                val pushModel = PushNotification( notiModel, user?.token.toString() )
+                Log.e("클릭 유저 token", user?.token.toString() )
 
+                testPush( pushModel )
             }
+        }
+
+        private fun testPush( notification : PushNotification ) = CoroutineScope( Dispatchers.IO).launch {
+
+            RetrofitInstance.api.postNotification( notification )
         }
 
     }

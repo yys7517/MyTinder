@@ -1,9 +1,9 @@
 package com.example.mytinder.message
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mytinder.R
@@ -21,7 +21,7 @@ class MatchedListActivity : AppCompatActivity() {
     private val TAG = MatchedListActivity::class.java.simpleName
 
     private val myMatchedList = ArrayList<UserInfoModel>()
-    private lateinit var userListRVAdapter : UserListRVAdapter
+    private lateinit var matchedListRVAdapter : MatchedListRVAdapter
 
     private val myUid = FirebaseAuthUtils.getUid()
 
@@ -34,8 +34,8 @@ class MatchedListActivity : AppCompatActivity() {
 
         txtTitle.text = "매칭되었어요!"
 
-        userListRVAdapter = UserListRVAdapter( baseContext, myMatchedList)
-        userListRV.adapter = userListRVAdapter
+        matchedListRVAdapter = MatchedListRVAdapter( baseContext, myMatchedList )
+        userListRV.adapter = matchedListRVAdapter
         userListRV.layoutManager = LinearLayoutManager( this )
 
         // 내가 좋아하는 사람들을 리스트에 담는다.
@@ -118,7 +118,7 @@ class MatchedListActivity : AppCompatActivity() {
                     }
                 }
 
-                userListRVAdapter.notifyDataSetChanged()
+                matchedListRVAdapter.notifyDataSetChanged()
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -127,5 +127,6 @@ class MatchedListActivity : AppCompatActivity() {
             }
         })
     }
+
 
 }
