@@ -11,12 +11,13 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
         android:textSize="30sp"
         android:textStyle="bold"
         android:textColor="@color/main_color"
-        android:background="@color/white"
-        android:text="소개팅앱"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@drawable/background_titletext_radius"
+        android:padding="10dp"
+        android:text="My Tinder"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
