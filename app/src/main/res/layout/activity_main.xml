@@ -15,11 +15,11 @@
 
             <!-- adjustViewBounds : 이미지 뷰 크기에 맞춰 이미지 비율 맞추는 옵션 -->
             <ImageView
-                android:id="@+id/settingIcon"
+                android:id="@+id/menuIcon"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_margin="15dp"
-                android:src="@drawable/setting"
+                android:src="@drawable/menu_icon"
                 android:adjustViewBounds="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -27,11 +27,13 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
+
         <com.yuyakaido.android.cardstackview.CardStackView
+            android:padding="5dp"
             android:id="@+id/cardStackView"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp"
             android:layout_marginTop="70dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

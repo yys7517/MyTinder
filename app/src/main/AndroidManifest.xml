@@ -20,7 +20,7 @@
             </intent-filter>
         </service>
         <activity
-            android:name=".setting.SettingActivity"
+            android:name=".setting.MenuActivity"
             android:exported="true" />
         <activity
             android:name=".message.MyLikeListActivity"

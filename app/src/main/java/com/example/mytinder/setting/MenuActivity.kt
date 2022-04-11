@@ -9,10 +9,10 @@ import com.example.mytinder.message.LikeMeListActivity
 import com.example.mytinder.message.MatchedListActivity
 import com.example.mytinder.message.MyLikeListActivity
 
-class SettingActivity : AppCompatActivity() {
+class MenuActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_setting)
+        setContentView(R.layout.activity_menu)
 
         val btnMyPage : Button = findViewById(R.id.btnMyPage)
         val btnMyLike : Button = findViewById(R.id.btnMyLike)

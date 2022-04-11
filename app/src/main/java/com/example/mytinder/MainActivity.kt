@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
@@ -14,12 +15,9 @@ import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.databinding.DataBindingUtil
-import com.bumptech.glide.Glide
-import com.example.mytinder.auth.IntroActivity
 import com.example.mytinder.auth.UserInfoModel
 import com.example.mytinder.databinding.ActivityMainBinding
-import com.example.mytinder.setting.MyPageActivity
-import com.example.mytinder.setting.SettingActivity
+import com.example.mytinder.setting.MenuActivity
 import com.example.mytinder.slider.CardStackAdapter
 import com.example.mytinder.utils.FirebaseAuthUtils
 import com.example.mytinder.utils.FirebaseRef
@@ -57,11 +55,11 @@ class MainActivity : AppCompatActivity() {
         auth = Firebase.auth
 
         val cardStackView : CardStackView = binding.cardStackView
-        val settingIcon : ImageView = binding.settingIcon
+        val menuIcon : ImageView = binding.menuIcon
 
-        settingIcon.setOnClickListener {
+        menuIcon.setOnClickListener {
             // 마이페이지로 이동.
-            val intent = Intent( this, SettingActivity::class.java )
+            val intent = Intent( this, MenuActivity::class.java )
             startActivity( intent )
         }
 
@@ -99,13 +97,15 @@ class MainActivity : AppCompatActivity() {
                 userCount += 1
 
                 if( userCount == userDataList.count() ) {
-                    getUserDataList( myGender )
 
-                    // Toast.makeText(baseContext, "유저 새롭게 받아옵니다.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(baseContext, "유저 정보를 새롭게 받아옵니다.", Toast.LENGTH_SHORT).show()
+                    Handler().postDelayed( {
+                        getUserDataList( myGender )
+                        // * ProgressBar Dialog 를 사용해보자.
 
-                    // * ProgressBar Dialog 를 사용해보자.
+                        userCount = 0
+                    }, 2000 )
 
-                    userCount = 0
                 }
 
             }
@@ -253,7 +253,7 @@ class MainActivity : AppCompatActivity() {
 
                     if( otherLikeUser.trim() == myUid.trim() ) {
                         Log.e( "매칭 결과", "매칭됨" )
-                        Toast.makeText(this@MainActivity, "매칭 완료", Toast.LENGTH_LONG ).show()
+                    // Toast.makeText(this@MainActivity, "매칭 완료", Toast.LENGTH_SHORT ).show()
 
                         // 1. 앱에서 코드로 Notification 띄우기
                         // createNotificationChannel()
@@ -277,7 +277,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-
+    /*
     private fun createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
@@ -295,6 +295,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
     private fun sendNotification() {
         var builder = NotificationCompat.Builder(this, "Test_Channel")
             .setSmallIcon(R.drawable.ic_launcher_background)
@@ -307,8 +308,8 @@ class MainActivity : AppCompatActivity() {
             // notificationId is a unique int for each notification that you must define
             notify(123, builder.build())
         }
-
     }
+     */
 
 
 }

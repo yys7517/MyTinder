@@ -1,13 +1,18 @@
 package com.example.mytinder.message
 
+import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mytinder.R
 import com.example.mytinder.auth.UserInfoModel
+import com.example.mytinder.databinding.MatchedUserListBinding
 import com.example.mytinder.utils.FirebaseAuthUtils
 import com.example.mytinder.utils.FirebaseRef
 import com.google.firebase.database.DataSnapshot
@@ -18,6 +23,8 @@ import com.google.firebase.database.ValueEventListener
 // 매칭된 사람 - 리스트 보여주기
 class MatchedListActivity : AppCompatActivity() {
 
+    private lateinit var binding : MatchedUserListBinding
+
     private val TAG = MatchedListActivity::class.java.simpleName
 
     private val myMatchedList = ArrayList<UserInfoModel>()
@@ -25,21 +32,26 @@ class MatchedListActivity : AppCompatActivity() {
 
     private val myUid = FirebaseAuthUtils.getUid()
 
+    private var matchedCount : Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.user_list)
+        binding = DataBindingUtil.setContentView( this, R.layout.matched_user_list )
 
-        val txtTitle : TextView = findViewById( R.id.txtTitle )
-        val userListRV : RecyclerView = findViewById( R.id.userListRV )
+
+        val txtTitle : TextView = binding.txtTitle
+        val userListRV: RecyclerView = binding.userListRV
 
         txtTitle.text = "매칭되었어요!"
 
-        matchedListRVAdapter = MatchedListRVAdapter( baseContext, myMatchedList )
+        matchedListRVAdapter = MatchedListRVAdapter(baseContext, myMatchedList)
         userListRV.adapter = matchedListRVAdapter
-        userListRV.layoutManager = LinearLayoutManager( this )
+        userListRV.layoutManager = LinearLayoutManager(this)
 
         // 내가 좋아하는 사람들을 리스트에 담는다.
-       getMatchedList( myUid )
+        getMatchedList(myUid)
+
+
 
     }
 
@@ -73,9 +85,11 @@ class MatchedListActivity : AppCompatActivity() {
         })
     }
 
+
     private fun isUserLikeMe( uid : String )  {
 
         FirebaseRef.userLikeRef.child( uid ).addValueEventListener(object : ValueEventListener {
+            // 어떤 특정 uid 가 좋아하는 uid 들을 구할 수 있다.
             override fun onDataChange(dataSnapshot: DataSnapshot) {
 
                 // Log.d( "나를 좋아하는가", dataSnapshot.toString() )
@@ -83,11 +97,15 @@ class MatchedListActivity : AppCompatActivity() {
                 for( dataModel in dataSnapshot.children ) {
                     Log.e("나를 좋아하는가", dataModel.toString() )
 
-                    val likeUserUid = dataModel.key.toString()      // 내가 좋아하는 유저가 -> 좋아하는 유저
+                    val likeUserUid = dataModel.key.toString()      // uid 가 좋아하는 uid
 
-                    // 내가 좋아하는 유저가 나를 좋아할 때
+                    // uid 가 좋아하는 유저가 나일 때 => 매칭된 것.
+                    // 왜냐하면, 내가 uid를 좋아할 때 실행되는 메서드.
                     if( likeUserUid == myUid  ){
-                        getUserDataList( uid )
+
+                        // 매칭된 사람인 uid 를 매칭 리스트에 추가한다.
+                        addToMatchedList( uid )
+                        matchedCount++
                     }
                 }
 
@@ -100,8 +118,9 @@ class MatchedListActivity : AppCompatActivity() {
     }
 
 
-    // 매칭된 사람의 uid를 매개변수로 넘겨줘서 그 유저들을 리스트에 담는다.
-    private fun getUserDataList( uid : String ) {
+
+    // 매칭 리스트에 uid 를 담는다.
+    private fun addToMatchedList( matchedUid : String ) {
 
         FirebaseRef.userInfoRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -113,8 +132,14 @@ class MatchedListActivity : AppCompatActivity() {
                     val user = dataModel.getValue(UserInfoModel::class.java)
 
                     // 전체 유저 중, 내가 찾고 있는 유저의 uid와 같을 때만 가져와 담는다.
-                    if( uid == user?.uid ) {
+                    if( matchedUid == user?.uid ) {
                         myMatchedList.add( user!! )
+
+                        // 매칭된 유저가 하나라도 있다면 ?
+                        if ( matchedCount == 1) {
+                            Toast.makeText( baseContext, "매칭을 축하드려요 !", Toast.LENGTH_SHORT).show()
+                            binding.textview.visibility = View.VISIBLE
+                        }
                     }
                 }
 
@@ -126,6 +151,7 @@ class MatchedListActivity : AppCompatActivity() {
 
             }
         })
+
     }
 
 
