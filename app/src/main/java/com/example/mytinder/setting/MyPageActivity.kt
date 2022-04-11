@@ -54,7 +54,7 @@ class MyPageActivity : AppCompatActivity() {
     private fun getMyUserData() {
 
         // 가져올 경로
-        val myUserInfoRef = FirebaseRef.userInfoRef.child( FirebaseAuthUtils.getUid() )
+        val myUserInfoRef = FirebaseRef.userInfoRef.child( FirebaseAuthUtils.getMyUid() )
 
         // Read from the database
         myUserInfoRef.addValueEventListener(object : ValueEventListener {

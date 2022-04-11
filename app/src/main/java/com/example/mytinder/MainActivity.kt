@@ -1,10 +1,6 @@
 package com.example.mytinder
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.Context
 import android.content.Intent
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -12,8 +8,6 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.databinding.DataBindingUtil
 import com.example.mytinder.auth.UserInfoModel
 import com.example.mytinder.databinding.ActivityMainBinding
@@ -21,6 +15,7 @@ import com.example.mytinder.setting.MenuActivity
 import com.example.mytinder.slider.CardStackAdapter
 import com.example.mytinder.utils.FirebaseAuthUtils
 import com.example.mytinder.utils.FirebaseRef
+import com.example.mytinder.utils.MyInfo
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -75,7 +70,7 @@ class MainActivity : AppCompatActivity() {
                         // 왼쪽 스와이프
                         Log.d( TAG, userDataList[userCount].uid.toString() )
 
-                        val myUid = FirebaseAuthUtils.getUid()
+                        val myUid = FirebaseAuthUtils.getMyUid()
                         val otherUid = userDataList[userCount].uid.toString()
 
                         disLike(myUid , otherUid )
@@ -86,7 +81,7 @@ class MainActivity : AppCompatActivity() {
 
                         Log.d( TAG, userDataList[userCount].uid.toString() )
 
-                        val myUid = FirebaseAuthUtils.getUid()
+                        val myUid = FirebaseAuthUtils.getMyUid()
                         val otherUid = userDataList[userCount].uid.toString()
 
                         Like( myUid , otherUid)
@@ -195,7 +190,7 @@ class MainActivity : AppCompatActivity() {
     // 내 UID를 통해 내 User 정보를 가져오자.
     private fun getMyUserData() {
 
-        val myUid = FirebaseAuthUtils.getUid()
+        val myUid = FirebaseAuthUtils.getMyUid()
 
         // 가져올 경로
         val myUserInfoRef = FirebaseRef.userInfoRef.child( myUid )
@@ -205,6 +200,9 @@ class MainActivity : AppCompatActivity() {
                 Log.d( TAG, dataSnapshot.toString() )
                 val myUserInfo = dataSnapshot.getValue(UserInfoModel::class.java)
                 myGender = myUserInfo?.gender.toString()
+
+                // 닉네임 저장해놓기
+                MyInfo.myNickname = myUserInfo?.nickname.toString()
 
                 // 나와 다른 성별의 유저를 불러오기
                 getUserDataList( myGender )

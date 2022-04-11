@@ -1,4 +1,4 @@
-package com.example.mytinder.message
+package com.example.mytinder.message.likeList
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -31,7 +31,7 @@ class MyLikeListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.user_list)
 
-        val myUid = FirebaseAuthUtils.getUid()
+        val myUid = FirebaseAuthUtils.getMyUid()
 
         val txtTitle : TextView = findViewById( R.id.txtTitle )
         val userListRV : RecyclerView = findViewById( R.id.userListRV )

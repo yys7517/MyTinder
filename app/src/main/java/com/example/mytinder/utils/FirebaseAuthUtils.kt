@@ -8,7 +8,7 @@ class FirebaseAuthUtils {
     companion object {
         private lateinit var auth : FirebaseAuth
 
-        fun getUid(): String {
+        fun getMyUid(): String {
             auth = Firebase.auth
 
             return auth.currentUser?.uid.toString()

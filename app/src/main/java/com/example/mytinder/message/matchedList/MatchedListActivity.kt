@@ -1,6 +1,5 @@
-package com.example.mytinder.message
+package com.example.mytinder.message.matchedList
 
-import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -30,7 +29,7 @@ class MatchedListActivity : AppCompatActivity() {
     private val myMatchedList = ArrayList<UserInfoModel>()
     private lateinit var matchedListRVAdapter : MatchedListRVAdapter
 
-    private val myUid = FirebaseAuthUtils.getUid()
+    private val myUid = FirebaseAuthUtils.getMyUid()
 
     private var matchedCount : Int = 0
 
@@ -44,14 +43,12 @@ class MatchedListActivity : AppCompatActivity() {
 
         txtTitle.text = "매칭되었어요!"
 
-        matchedListRVAdapter = MatchedListRVAdapter(baseContext, myMatchedList)
+        matchedListRVAdapter = MatchedListRVAdapter( this , myMatchedList)
         userListRV.adapter = matchedListRVAdapter
         userListRV.layoutManager = LinearLayoutManager(this)
 
         // 내가 좋아하는 사람들을 리스트에 담는다.
         getMatchedList(myUid)
-
-
 
     }
 
@@ -106,6 +103,12 @@ class MatchedListActivity : AppCompatActivity() {
                         // 매칭된 사람인 uid 를 매칭 리스트에 추가한다.
                         addToMatchedList( uid )
                         matchedCount++
+
+                        if( matchedCount == 1 ) {
+                            Toast.makeText( baseContext, "매칭을 축하드려요 !", Toast.LENGTH_SHORT).show()
+                            binding.textview.visibility = View.VISIBLE
+                        }
+
                     }
                 }
 
@@ -135,11 +138,6 @@ class MatchedListActivity : AppCompatActivity() {
                     if( matchedUid == user?.uid ) {
                         myMatchedList.add( user!! )
 
-                        // 매칭된 유저가 하나라도 있다면 ?
-                        if ( matchedCount == 1) {
-                            Toast.makeText( baseContext, "매칭을 축하드려요 !", Toast.LENGTH_SHORT).show()
-                            binding.textview.visibility = View.VISIBLE
-                        }
                     }
                 }
 

@@ -1,4 +1,4 @@
-package com.example.mytinder.message
+package com.example.mytinder.message.likeList
 
 import android.content.Context
 import android.util.Log
@@ -15,15 +15,15 @@ import com.example.mytinder.utils.FirebaseRef
 
 class UserListRVAdapter(
     val context: Context,
-    val items : ArrayList<UserInfoModel> ) : RecyclerView.Adapter< UserListRVAdapter.ViewHolder > () {
+    val items : ArrayList<UserInfoModel> ) : RecyclerView.Adapter<UserListRVAdapter.ViewHolder> () {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserListRVAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.rv_user_list, parent,false )
 
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: UserListRVAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bindItems( items[position] )
     }
 

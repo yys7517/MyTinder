@@ -5,9 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import com.example.mytinder.R
-import com.example.mytinder.message.LikeMeListActivity
-import com.example.mytinder.message.MatchedListActivity
-import com.example.mytinder.message.MyLikeListActivity
+import com.example.mytinder.message.likeList.LikeMeListActivity
+import com.example.mytinder.message.matchedList.MatchedListActivity
+import com.example.mytinder.message.likeList.MyLikeListActivity
+import com.example.mytinder.message.messageList.MyMessageActivity
 
 class MenuActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,6 +19,7 @@ class MenuActivity : AppCompatActivity() {
         val btnMyLike : Button = findViewById(R.id.btnMyLike)
         val btnLikeMe : Button = findViewById(R.id.btnLikeMe)
         val btnMatched : Button = findViewById(R.id.btnMatched)
+        val btnMyMessage : Button = findViewById(R.id.btnMyMessage)
 
         btnMyPage.setOnClickListener {
             val intent = Intent( this, MyPageActivity::class.java )
@@ -38,6 +40,11 @@ class MenuActivity : AppCompatActivity() {
 
         btnMatched.setOnClickListener {
             val intent = Intent( this, MatchedListActivity::class.java )
+            startActivity(intent)
+        }
+
+        btnMyMessage.setOnClickListener {
+            val intent = Intent( this, MyMessageActivity::class.java )
             startActivity(intent)
         }
     }

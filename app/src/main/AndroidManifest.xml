@@ -11,26 +11,31 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyTinder">
+        <activity
+            android:name=".message.messageList.MyMessageActivity"
+            android:exported="true" />
+
         <service
             android:name=".message.fcm.FirebaseService"
             android:enabled="true"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
         <activity
             android:name=".setting.MenuActivity"
             android:exported="true" />
         <activity
-            android:name=".message.MyLikeListActivity"
+            android:name=".message.likeList.MyLikeListActivity"
             android:exported="true" />
         <activity
-            android:name=".message.LikeMeListActivity"
-            android:exported="true"/>
+            android:name=".message.likeList.LikeMeListActivity"
+            android:exported="true" />
         <activity
-            android:name=".message.MatchedListActivity"
-            android:exported="true"/>
+            android:name=".message.matchedList.MatchedListActivity"
+            android:exported="true" />
         <activity
             android:name=".setting.MyPageActivity"
             android:exported="true" />

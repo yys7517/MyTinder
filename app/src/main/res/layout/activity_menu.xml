@@ -43,10 +43,24 @@
             android:text="마이페이지"
             android:fontFamily="@font/bmjua_ttf"
             android:textSize="20sp"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="60dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/btnMyMessage"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:background="@drawable/background_maincolor_radius"
+            android:text="내가 받은 메세지"
+            android:fontFamily="@font/bmjua_ttf"
+            android:textSize="20sp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnMyPage" />
 
         <Button
             android:id="@+id/btnMyLike"
@@ -60,7 +74,7 @@
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnMyPage" />
+            app:layout_constraintTop_toBottomOf="@+id/btnMyMessage" />
 
         <Button
             android:id="@+id/btnLikeMe"
