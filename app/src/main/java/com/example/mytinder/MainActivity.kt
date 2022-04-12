@@ -1,12 +1,15 @@
 package com.example.mytinder
 
+import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.example.mytinder.auth.UserInfoModel
@@ -93,13 +96,9 @@ class MainActivity : AppCompatActivity() {
 
                 if( userCount == userDataList.count() ) {
 
-                    Toast.makeText(baseContext, "유저 정보를 새롭게 받아옵니다.", Toast.LENGTH_SHORT).show()
-                    Handler().postDelayed( {
-                        getUserDataList( myGender )
-                        // * ProgressBar Dialog 를 사용해보자.
+                    getUserDataList( myGender )
 
-                        userCount = 0
-                    }, 2000 )
+                    userCount = 0
 
                 }
 
@@ -140,6 +139,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun getUserDataList( currentUserGender : String ) {
 
+        val mDialogView = LayoutInflater.from( this ).inflate( R.layout.progressbar_dialog , null )
+        val mBuilder = AlertDialog.Builder( this )
+            .setView( mDialogView )
+
+        val mAlertDialog = mBuilder.show()
+
+        mAlertDialog.findViewById<TextView>( R.id.txtProgress ).text = "유저 정보 새롭게 가져오는 중.."
+
         // Read from the database
         FirebaseRef.userInfoRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -178,13 +185,20 @@ class MainActivity : AppCompatActivity() {
 
                 cardStackAdapter.notifyDataSetChanged()
 
+                Handler().postDelayed( {
+                    mAlertDialog.dismiss()
+                }, 2500)
+
+
             }
 
             override fun onCancelled(error: DatabaseError) {
                 // Failed to read value
-
+                mAlertDialog.dismiss()
             }
         })
+
+
     }
 
     // 내 UID를 통해 내 User 정보를 가져오자.
@@ -251,7 +265,7 @@ class MainActivity : AppCompatActivity() {
 
                     if( otherLikeUser.trim() == myUid.trim() ) {
                         Log.e( "매칭 결과", "매칭됨" )
-                    // Toast.makeText(this@MainActivity, "매칭 완료", Toast.LENGTH_SHORT ).show()
+                        // Toast.makeText(this@MainActivity, "매칭 완료", Toast.LENGTH_SHORT ).show()
 
                         // 1. 앱에서 코드로 Notification 띄우기
                         // createNotificationChannel()

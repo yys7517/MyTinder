@@ -58,10 +58,6 @@ class UserListRVAdapter(
             txtCity.text = "${user.city} 거주"
             txtGender.text ="${user.gender}성"
 
-            // 리스트 클릭 시 - 프로필 구경하기.. Activity, layout 만들어야함
-            itemView.setOnClickListener {
-
-            }
         }
 
     }

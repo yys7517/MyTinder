@@ -70,6 +70,9 @@ class MatchedListRVAdapter(
 
             // 리스트 클릭 시 - 매칭된 유저
             itemView.setOnClickListener {
+
+                Toast.makeText( context, "${user.nickname}님과 매칭되었어요 ! 메세지를 보내보세요 !", Toast.LENGTH_SHORT ).show()
+
 //                val notiModel = NotiModel("a","b")
 //                val pushModel = PushNotification( notiModel, user?.token.toString() )
 //                Log.e("클릭 유저 token", user?.token.toString() )
