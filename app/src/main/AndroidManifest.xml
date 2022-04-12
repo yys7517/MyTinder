@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyTinder">
         <activity
+            android:name=".message.messageList.MessageWatchActivity"
+            android:exported="true" />
+        <activity
             android:name=".message.messageList.MyMessageActivity"
             android:exported="true" />
 

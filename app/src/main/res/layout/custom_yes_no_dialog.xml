@@ -7,12 +7,12 @@
     android:layout_height="wrap_content">
 
     <TextView
+        android:id="@+id/txtQuestion"
         android:gravity="center"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
         android:textAlignment="center"
-        android:text="프로필 사진을 변경하시겠습니까?"
         android:layout_width="match_parent"
         android:layout_height="100dp" />
 

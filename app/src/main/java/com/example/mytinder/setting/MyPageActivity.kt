@@ -81,13 +81,14 @@ class MyPageActivity : AppCompatActivity() {
         // 프로필 사진 변경하기
         binding.myImage.setOnClickListener {
 
-            val mDialogView = LayoutInflater.from( this ).inflate( R.layout.profile_image_change_dialog , null )
+            val mDialogView = LayoutInflater.from( this ).inflate( R.layout.custom_yes_no_dialog , null )
             val mBuilder = AlertDialog.Builder( this )
                 .setView( mDialogView )
 
 
             val mAlertDialog = mBuilder.show()
 
+            mAlertDialog.findViewById<TextView>(R.id.txtQuestion).text = "프로필 사진을 변경하시겠습니까?"
             // '예' 버튼 클릭 시
             mAlertDialog.findViewById<Button>(R.id.btnSubmit).setOnClickListener {
 
